@@ -1,1 +1,95 @@
+####Reverse digits
+
+class Solution {
+  public:
+    int reverseDigits(int n) {
+        // Code here9n
+        int a=(n<0)?-1:1;
+        n=abs(n);
+        int rev=0;
+        while (n>0){
+            int dig=n%10;
+            rev=(rev*10)+dig;
+            n/=10;
+        }
+        rev=rev*a;
+        return rev;
+        
+    }
+};
+
+
+####Search insert position
+
+class Solution {
+public:
+
+    int searchInsert(vector<int>& nums, int target) {
+        int left=0;
+        int right=nums.size()-1;
+        while(left<=right){
+            int mid=left+(right-left)/2;
+            if (nums[mid]==target){
+                return mid;
+            }
+            else if (target<nums[mid]){
+                right=mid-1;
+            }
+            else{
+                left=mid+1;
+            }
+        }
+        return left;
+    }
+};
+
+
+####Single Number
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int result=0;
+        for (auto a:nums){
+            result^=a;
+        }
+        return result;
+    }
+};
+
+
+####Reverse Linked List
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* ptr=head;
+        ListNode* prev=nullptr;
+        while (ptr!=nullptr){
+            ListNode* front=ptr->next;
+            ptr->next=prev;
+            prev=ptr;
+            ptr=front;
+        }
+        return prev;
+    }
+};
+
+
+####Rotate Image
+
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        for (int i{0};i<n;i++){
+            for (int j{i+1};j<n;j++){
+                swap(matrix[i][j],matrix[j][i]);
+            }
+        }
+        for (int i{0};i<n;i++){
+            reverse(matrix[i].begin(),matrix[i].end());
+        }
+    }
+};
 
