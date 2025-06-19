@@ -1,0 +1,78 @@
+####Two Sum
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> mpp;
+
+        for (int i = 0; i < nums.size(); i++) {
+            int x=nums[i];
+            int curr= target-x;
+            if (mpp.count(curr)){
+                return {i,mpp[curr]};
+            }
+            mpp[nums[i]]=i;
+        }
+
+        return {}; 
+    }
+};
+
+
+
+####Alone in Couple
+
+class Solution {
+  public:
+    int findSingle(vector<int> &arr) {
+        // code here
+        int result=0;
+       for (auto i: arr ){
+           result^=i;
+       }
+       return result;
+        
+    }
+};
+
+####Best Time to Buy and Sell Stock
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int maxp=0;
+        int min=INT_MAX;
+        for (auto i: prices){
+            if (i<min){
+                min=i;
+            }
+            else{
+                int p=i-min;
+                maxp=max(maxp,p);
+            }
+        }
+        return maxp;
+    }
+};
+
+####Sort Colors
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int low=0, mid=0, high=nums.size()-1;
+
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                swap(nums[low], nums[mid]);
+                low++;
+                mid++;
+            } else if (nums[mid] == 1) {
+                mid++;
+            } else {
+                swap(nums[mid], nums[high]);
+                high--;
+            }
+        }
+    }
+};
