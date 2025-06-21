@@ -1,0 +1,156 @@
+####Rotate Image
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        for (int i{0};i<n;i++){
+            for (int j{i+1};j<n;j++){
+                swap(matrix[i][j],matrix[j][i]);
+            }
+        }
+        for (int i{0};i<n;i++){
+            reverse(matrix[i].begin(),matrix[i].end());
+        }
+    }
+};
+
+
+####3 Sum
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        int n = nums.size();
+        if (n < 3) return res;
+
+        sort(nums.begin(), nums.end());
+
+        for (int i = 0; i + 2 < n; ++i) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            if (nums[i] > 0) break;
+            int l = i + 1, r = n - 1;
+            while (l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+                if (sum == 0) {
+                    res.push_back({nums[i], nums[l], nums[r]});
+                    // Move both pointers and skip duplicates
+                    ++l; --r;
+                    while (l < r && nums[l] == nums[l - 1]) ++l;
+                    while (l < r && nums[r] == nums[r + 1]) --r;
+                }
+                else if (sum < 0) {
+                    ++l;
+                }
+                else {
+                    --r;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+
+
+####Maximum Consecutive Ones
+class Solution {
+public:
+    int findMaxConsecutiveOnes(vector<int>& nums) {
+        int mx=0;
+        int cnt=0;
+        for (int i{0};i<nums.size();i++){
+            if (nums[i]==1){
+                cnt++;
+            }
+            else{
+                cnt=0;
+            }
+            mx=max(cnt,mx);
+        }
+        return mx;
+    }
+};
+
+
+
+
+
+####Design Twitter
+
+class Twitter {
+public:
+    struct Tweet {
+        int id, time;
+        Tweet* next;
+        Tweet(int _id, int _time): id(_id), time(_time), next(nullptr) {}
+    };
+
+    struct User {
+        unordered_set<int> followees;
+        Tweet* head;
+        User() : head(nullptr) {}
+    };
+
+    unordered_map<int, User*> users;
+    int timestamp;
+
+    Twitter(): timestamp(0) {}
+
+    // Helper to ensure a user exists and follows themselves
+    User* ensureUser(int userId) {
+        if (!users.count(userId)) {
+            users[userId] = new User();
+            users[userId]->followees.insert(userId);
+        }
+        return users[userId];
+    }
+
+    void postTweet(int userId, int tweetId) {
+        User* u = ensureUser(userId);
+        Tweet* tw = new Tweet(tweetId, timestamp++);
+        tw->next = u->head;
+        u->head = tw;
+    }
+
+    vector<int> getNewsFeed(int userId) {
+        vector<int> feed;
+        if (!users.count(userId)) return feed;
+
+        struct Item {
+            Tweet* t;
+            int time;
+        };
+        struct Cmp {
+            bool operator()(const Item &a, const Item &b) const {
+                return a.time < b.time;
+            }
+        };
+        priority_queue<Item, vector<Item>, Cmp> pq;
+
+        for (int fid : users[userId]->followees) {
+            Tweet* t = users[fid]->head;
+            if (t) pq.push({t, t->time});
+        }
+
+        int cnt = 0;
+        while (!pq.empty() && cnt < 10) {
+            Item it = pq.top(); pq.pop();
+            feed.push_back(it.t->id);
+            cnt++;
+            if (it.t->next) pq.push({it.t->next, it.t->next->time});
+        }
+        return feed;
+    }
+
+    void follow(int followerId, int followeeId) {
+        if (followerId == followeeId) return;
+        User* f = ensureUser(followerId);
+        ensureUser(followeeId);
+        f->followees.insert(followeeId);
+    }
+
+    void unfollow(int followerId, int followeeId) {
+        if (followerId == followeeId || !users.count(followerId)) return;
+        users[followerId]->followees.erase(followeeId);
+    }
+};
