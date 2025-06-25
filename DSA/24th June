@@ -1,0 +1,231 @@
+####Design a Singly Linked List and write functions to
+  ○ Insert at beginning
+  ○ Insert at end
+  ○ Insert at any index
+  ○ Delete at beginning
+  ○ Delete at end
+  ○ Delete at index
+  ○ Delete first occurrence of node with given value
+  ○ Write at least 2 test cases for each operation
+
+
+
+  struct node{
+    int data;
+    node* next;
+
+    node(int val): data(val),next(nullptr){}
+};
+
+void insertbeg(int val,node*&head){
+    node* newnode= new node(val);
+    newnode->next=head;
+    head=newnode;
+}
+
+void insertend(int val,node*&head){
+    node *ptr=head;
+    while(ptr->next!=nullptr){
+        ptr=ptr->next;
+    }
+    ptr->next=new node(val);
+}
+
+void insertindx(int val,int indx,node*&head){
+    node*ptr=head;
+    node*newnode=new node(val);
+    if (indx< 0) {
+            cout << "Invalid index\n";
+            return;
+        }
+    if (indx==0){
+        newnode->next=head;
+        head=newnode;
+        return;
+    }
+
+    for (int i{}; ptr && i<indx-1;i++){
+        ptr=ptr->next;
+    }
+    if (!ptr){
+        cout<<"Index out of bound"<<endl;
+    }
+    node* nextn=ptr->next;
+    ptr->next=newnode;
+    newnode->next=nextn;
+}
+
+void delbeg(node*&head){
+    node* ptr=head;
+    if (!ptr){
+        cout<<"nothing to delete"<<endl;
+        return;
+    }
+    head=head->next;
+    delete ptr;
+    cout<<"Deleted the begining node"<<endl;
+}
+
+void delend(node*&head){
+    node* ptr=head;
+    if (!ptr){
+        cout<<"nothing to delete"<<endl;
+        return;
+    }
+    if (!ptr->next){
+        free(head);
+        cout<<"deleted last node"<<endl;
+        head=nullptr;
+        return;
+
+    }
+    while(ptr->next->next!=nullptr){
+        ptr=ptr->next;
+    }
+    node* ptr1=ptr->next;
+    ptr->next=nullptr;
+    delete ptr1;
+    cout<<"Deleted the last node"<<endl;
+}
+
+void delindx(int indx,node*&head) {
+        if (indx < 0 || !head) {
+            cout << "Invalid index or empty list\n";
+            return;
+        }
+        if (indx == 0) {
+            delbeg(head);
+            return;
+        }
+        node* temp = head;
+        for (int i = 0; temp->next && i < indx - 1; ++i)
+            temp = temp->next;
+        if (!temp->next) {
+            cout << "Index out of bounds\n";
+            return;
+        }
+        node* nodeToDelete = temp->next;
+        temp->next = temp->next->next;
+        delete nodeToDelete;
+    }
+
+void deloccur(int val, node*& head){
+    if (!head){
+        cout<<"Nothing in the linked list"<<endl;
+        return;
+    }
+    if (head->data == val) {
+        node* toDelete = head;
+        head = head->next;
+        delete toDelete;
+        cout << "Deleted the first occurred node of val " << val << endl;
+        return;
+    }
+    node* ptr=head;
+    while (ptr->next && ptr->next->data!=val){
+        ptr=ptr->next;
+    }
+    if (!ptr->next) {
+        cout << "Value " <<val<< " not found in the list" << endl;
+        return;
+    }
+    node *ptr1=ptr->next;
+    ptr->next=ptr1->next;
+    delete ptr1;
+    cout<<"Deleted the first occured node of val "<<val<<endl;
+    }
+
+void disp(node* head){
+    node* ptr=head;
+    while(ptr!=nullptr){
+        cout<<ptr->data<<"->";
+        ptr=ptr->next;
+    }
+    cout<<"NULL";
+    cout<<'\n';
+}
+
+int main(){
+    node* head= new node(20);
+    disp(head);
+    insertbeg(10,head);
+    insertbeg(0,head);
+    disp(head);
+    insertend(30,head);
+    disp(head);
+    insertindx(40,3,head);
+    disp(head);
+    insertindx(40,4,head);
+    disp(head);
+    delbeg(head);
+    delbeg(head);
+    disp(head);
+    delend(head);
+    disp(head);
+    delend(head);
+    disp(head);
+    delindx(1,head);
+    disp(head);
+    delindx(0,head);
+    disp(head);
+    insertbeg(0,head);
+    insertend(20,head);
+    insertend(40,head);
+    insertend(20,head);
+    disp(head);
+    deloccur(20,head);
+    disp(head);
+    deloccur(40,head);
+    disp(head);
+}
+
+
+
+
+####Delete a Node in Singly Linked List
+
+class Solution {
+  public:
+    /* Function to delete a node from a linked list */
+    Node* deleteNode(Node* head, int x) {
+        // code here
+        if (x <=0 || !head) {
+            cout << "Invalid index or empty list\n";
+            return nullptr;
+        }
+        if (x == 1) {
+            Node* ptr=head;
+            head=head->next;
+            delete ptr;
+            return head;
+        }
+        Node* temp = head;
+        for (int i = 1; temp->next && i < x - 1; ++i)
+            temp = temp->next;
+        if (!temp->next) {
+            cout << "Index out of bounds\n";
+            return nullptr;
+        }
+        Node* nodeToDelete = temp->next;
+        temp->next = temp->next->next;
+        delete nodeToDelete;
+        return head;
+    }
+};
+
+
+####Find Middle
+
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        if (!head) return nullptr;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        return slow;
+    }
+};
