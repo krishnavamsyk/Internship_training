@@ -1,0 +1,98 @@
+####Palindrome Linked List
+
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if (!head || !head->next) return true;
+        ListNode* slow=head;
+        ListNode* fast=head;
+        while (fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+
+        ListNode* prev=nullptr;
+        while(slow){
+            ListNode* temp=slow->next;
+            slow->next=prev;
+            prev=slow;
+            slow=temp;
+        }
+        ListNode* sec=prev;
+        ListNode* ptr=head;
+        while (sec){
+            if (sec->val!=ptr->val){
+                return false;
+            }
+            sec=sec->next;
+            ptr=ptr->next;
+        }
+        return true;
+    }
+};
+
+
+
+
+####Rotate List
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        ListNode* ptr= head;
+        int length=0;
+        while (ptr){
+            length++;
+            ptr=ptr->next;
+        }
+        k=k%length;
+        if (k==0){
+            return head;
+        }
+        ListNode* temp=head;
+        while (temp->next!=NULL){
+            temp=temp->next;
+        }
+        temp->next=head;
+
+        int m=length-k;
+        while (m--){
+            temp=temp->next;
+        }
+        head = temp->next;
+        temp->next = NULL;
+            
+        return head;
+
+    }
+};
+
+
+
+####Magical String
+class Solution {
+public:
+    int magicalString(int n) {
+        if (n == 0) return 0;
+        if (n <= 3) return 1;
+
+        vector<int> s = {1, 2, 2};
+        int count = 1;
+        int i = 2;
+        int nextNum = 1;
+
+        while (s.size() < n) {
+            int times = s[i];
+            for (int j = 0; j < times; ++j) {
+                s.push_back(nextNum);
+                if (nextNum == 1 && s.size() <= n)
+                    ++count;
+            }
+            nextNum = 3 - nextNum;
+            ++i;
+        }
+
+        return count;
+    }
+};
+
+
