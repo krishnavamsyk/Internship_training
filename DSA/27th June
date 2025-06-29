@@ -1,0 +1,101 @@
+####Add Two Numbers
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummyHead = new ListNode(0);
+        ListNode* current = dummyHead;
+        int carry = 0;
+
+        while (l1 != nullptr || l2 != nullptr || carry != 0) {
+            int val1 = (l1 != nullptr) ? l1->val : 0;
+            int val2 = (l2 != nullptr) ? l2->val : 0;
+            int sum = val1 + val2 + carry;
+
+            carry = sum / 10;
+            int digit = sum % 10;
+
+            current->next = new ListNode(digit);
+            current = current->next;
+
+            if (l1 != nullptr) l1 = l1->next;
+            if (l2 != nullptr) l2 = l2->next;
+        }
+
+        return dummyHead->next;
+    }
+};
+
+
+
+
+
+####Maximum Twin Sum
+
+class Solution {
+public:
+    int pairSum(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+        
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        // Step 2: Reverse second half
+        ListNode* prev = nullptr;
+        while (slow) {
+            ListNode* nextTemp = slow->next;
+            slow->next = prev;
+            prev = slow;
+            slow = nextTemp;
+        }
+        
+        // Step 3: Calculate twin sums
+        int maxSum = 0;
+        ListNode* first = head;
+        ListNode* second = prev;
+        
+        while (second) {
+            int sum = first->val + second->val;
+            maxSum = max(maxSum, sum);
+            first = first->next;
+            second = second->next;
+        }
+        
+        return maxSum;
+    }
+};
+
+
+####Design Browser History
+
+class BrowserHistory {
+private:
+    vector<string> history;
+    int currentIndex;
+public:
+    BrowserHistory(string homepage) {
+        history.push_back(homepage);
+        currentIndex = 0;
+    }
+    
+    void visit(string url) {
+        history.resize(currentIndex + 1);
+        history.push_back(url);
+        currentIndex++;
+    }
+    
+    string back(int steps) {
+        currentIndex = max(0, currentIndex - steps);
+        return history[currentIndex];
+    }
+    
+    string forward(int steps) {
+        currentIndex = min((int)history.size() - 1, currentIndex + steps);
+        return history[currentIndex];
+    }
+};
+
+
