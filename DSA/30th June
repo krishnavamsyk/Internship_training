@@ -1,0 +1,151 @@
+####Design Stack using Arrays
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class stack{
+    private:
+        vector <int> vec;
+        int top{0};
+    public:
+        stack(int x): vec(x,0){}
+        void push(int a){
+            if (top<vec.size()){
+                vec[top++]=a;
+                cout<<"Pushed element "<<a<<endl;
+            }
+            else{
+                cout<<"Overflow!! element cannot be pushed "<<endl;
+            }
+        }
+
+        void pop(){
+            if (top>0){
+                cout<<"Popped element "<<vec[--top]<<endl;
+            }
+            else{
+                cout<<"Underflow!! no element to pop"<<endl;
+            }
+        }
+
+        void display(){
+            cout<<"[ ";
+            for (int i{0};i<top;i++){
+                cout<<vec[i]<<' ';
+            }
+            cout<<"]"<<endl;
+        }
+
+        void topp(){
+            if (top>0){
+                cout<<"The top is at "<<top<<endl;
+            }
+            else{
+                cout<<"Stack is empty"<<endl;
+            }
+        }
+
+        void peep(){
+            cout<<"The value at top "<<vec[top-1]<<endl;
+        }
+};
+int main(){
+    stack s(5);
+    s.push(1);
+    s.push(4);
+    s.push(5);
+    s.push(8);
+    s.display();
+    s.pop();
+    s.display();
+    s.topp();
+    s.peep();
+    
+
+}
+
+
+
+####Valid Parentheses
+
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> stk;
+        for (char c : s) {
+            if (c == '(' || c == '{' || c == '[') {
+                stk.push(c);
+            } 
+            else {
+                if (stk.empty()) return false;
+
+                char top = stk.top();
+                if ((c == ')' && top != '(') ||
+                    (c == '}' && top != '{') ||
+                    (c == ']' && top != '[')) {
+                    return false;
+                }
+                stk.pop();
+            }
+        }
+        return stk.empty();
+        }
+};
+
+
+
+####Swapping Nodes
+
+class Solution {
+public:
+    ListNode* swapNodes(ListNode* head, int k) {
+        stack<ListNode*> stk;
+        ListNode* curr = head;
+        ListNode* kthFromStart = nullptr;
+        
+        int count = 0;
+        
+        while (curr) {
+            stk.push(curr);
+            count++;
+            if (count == k) {
+                kthFromStart = curr;
+            }
+            curr = curr->next;
+        }
+    
+        ListNode* kthFromEnd = nullptr;
+        for (int i = 0; i < k; i++) {
+            kthFromEnd = stk.top();
+            stk.pop();
+        }
+
+        int temp = kthFromStart->val;
+        kthFromStart->val = kthFromEnd->val;
+        kthFromEnd->val = temp;
+        
+        return head;
+    }
+    
+    ListNode* createList(int arr[], int n) {
+        if (n == 0) return nullptr;
+        ListNode* head = new ListNode(arr[0]);
+        ListNode* curr = head;
+        for (int i = 1; i < n; i++) {
+            curr->next = new ListNode(arr[i]);
+            curr = curr->next;
+        }
+        return head;
+    }
+
+    void printList(ListNode* head) {
+        while (head) {
+            cout << head->val << " ";
+            head = head->next;
+        }
+        cout << endl;
+    }
+
+
+};
