@@ -1,0 +1,160 @@
+####Design Queue using Arrays
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class queue{
+    private:
+        int front{};
+        int rear{};
+        vector <int> q;
+        int capacity{};
+    public:
+        queue(int a): q(a,0), capacity(a), front(0), rear(0){}
+
+        void frontt(){
+            if (front == rear) {
+                cout << "Queue is empty, no front element" << endl;
+            } 
+            else {
+                cout << "The front element is " << q[front] << endl;
+            }
+        }
+        void enqueue(int x){
+            if (rear>=capacity){
+                cout<<"Overflow!"<<endl;
+            }
+            else{
+                q[rear++]=x;
+                cout<<"Element "<<x<<"inserted in queue"<<endl;
+            }
+        }
+
+        void dequeue(){
+            if (front==rear){
+                cout<<"Unerflow!! Queue is empty"<<endl;
+            }
+            else{
+                cout<<"element "<<q[front++]<<"removed from queue"<<endl;
+            }
+        }
+        
+        void display() {
+            if (front == rear) {
+                cout << "Queue is empty" << endl;
+            } else {
+                cout << "Queue elements: ";
+                for (int i = front; i < rear; ++i) {
+                    cout << q[i] << " ";
+                }
+                cout << endl;
+            }
+    }
+};
+
+int main(){
+    queue q(5);
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.display();
+    q.frontt();
+    q.dequeue();
+    q.display();
+    q.frontt();
+
+}
+
+
+
+
+####Next Greater Element I
+
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> ngeMap;
+        stack<int> stk;
+
+        for (int num : nums2) {
+            while (!stk.empty() && num > stk.top()) {
+                ngeMap[stk.top()] = num;
+                stk.pop();
+            }
+            stk.push(num);
+        }
+
+        while (!stk.empty()) {
+            ngeMap[stk.top()] = -1;
+            stk.pop();
+        }
+
+        vector<int> ans;
+        for (int num : nums1) {
+            ans.push_back(ngeMap[num]);
+        }
+
+        return ans;
+}
+};
+
+
+
+
+
+
+####Next Greater Element II
+
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n, -1);
+        stack<int> stk;
+
+        for (int i = 2 * n - 1; i >= 0; i--) {
+            int idx = i % n;
+            while (!stk.empty() && nums[stk.top()] <= nums[idx]) {
+                stk.pop();
+            }
+            if (!stk.empty()) {
+                ans[idx] = nums[stk.top()];
+            }
+
+            stk.push(idx);
+        }
+        return ans;
+    }
+};
+
+
+
+
+####Odd Even Linked List
+
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head || !head->next) return head;
+
+        ListNode* odd = head;
+        ListNode* even = head->next;
+        ListNode* evenHead = even;
+
+        while (even && even->next) {
+            odd->next = even->next;
+            odd = odd->next;
+
+            even->next = odd->next;
+            even = even->next;
+        }
+
+        odd->next = evenHead;
+
+        return head;
+    }
+
+    
+};
