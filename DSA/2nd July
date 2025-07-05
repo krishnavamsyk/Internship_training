@@ -1,0 +1,102 @@
+####Design Stack Using Queues
+
+class MyStack {
+    private:
+        queue<int> q1,q2;
+public:
+    MyStack() {
+        
+    }
+    
+    void push(int x) {
+        q2.push(x);
+        while (!q1.empty()) {
+            q2.push(q1.front());
+            q1.pop();
+        }
+        swap(q1, q2);
+    }
+    
+    int pop() {
+        if (q1.empty()) return -1;
+        int val = q1.front();
+        q1.pop();
+        return val;
+    }
+    
+    int top() {
+        if (q1.empty()) return -1;
+        return q1.front();
+    }
+    
+    bool empty() {
+        return q1.empty();
+    }
+};
+
+
+####Design Queues Using Stack
+
+class MyQueue {
+private:
+    stack<int> s1,s2;
+    void shiftStacks() {
+        if (s2.empty()) {
+            while (!s1.empty()) {
+                s2.push(s1.top());
+                s1.pop();
+            }
+        }
+    }
+public:
+    MyQueue() {
+        
+    }
+    
+    void push(int x) {
+        s1.push(x);
+    }
+    
+    int pop() {
+        shiftStacks();
+        int val = s2.top();
+        s2.pop();
+        return val;
+    }
+    
+    int peek() {
+        shiftStacks();
+        return s2.top();
+    }
+    
+    bool empty() {
+        return s1.empty() && s2.empty();
+    }
+};
+
+
+####Evaluate Reverse Polish Notation
+
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> st;
+        
+        for (const string& token : tokens) {
+            if (token == "+" || token == "-" || token == "*" || token == "/") {
+                int b = st.top(); st.pop();
+                int a = st.top(); st.pop();
+                int res = 0;
+                
+                if (token == "+") res = a + b;
+                else if (token == "-") res = a - b;
+                else if (token == "*") res = a * b;
+                else if (token == "/") res = a / b;                  
+                st.push(res);
+            } else {
+                st.push(stoi(token));
+            }
+        }
+        return st.top();
+    }
+};
