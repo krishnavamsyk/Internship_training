@@ -1,0 +1,109 @@
+####Find the Celebrity
+
+class Solution {
+  public:
+    int celebrity(vector<vector<int> >& mat) {
+        // code here
+        stack <int> st;
+        int n=mat[0].size();
+        for (int i=0; i<n;i++){
+            st.push(i);
+        }
+        while (st.size()>1){
+            int a=st.top();
+            st.pop();
+            int b=st.top();
+            st.pop();
+            
+            if (mat[a][b]==1){
+                st.push(b);
+            }
+            else{
+                st.push(a);
+            }
+        }
+        if (st.empty()){
+            return -1;
+        }
+        
+        int candidate =st.top();
+        for (int i=0;i<n;i++){
+            if (i!=candidate){
+                if (mat[candidate][i]==1 || mat[i][candidate]==0){
+                    return -1;
+                }
+            }
+        }
+        return candidate;
+    }
+};
+
+
+
+####Trapping Rain Water
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int n = height.size();
+        int left = 0, right = n - 1;
+        int left_max = 0, right_max = 0;
+        int water = 0;
+
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= left_max)
+                    left_max = height[left];
+                else
+                    water += left_max - height[left];
+                left++;
+            } else {
+                if (height[right] >= right_max)
+                    right_max = height[right];
+                else
+                    water += right_max - height[right];
+                right--;
+            }
+        }
+        return water;
+    }
+};
+
+
+####Design LRU Cache
+
+class LRUCache {
+private:
+    int cap;
+    list<pair<int, int>> lruList;
+    unordered_map<int, list<pair<int, int>>::iterator> cacheMap; 
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+    }
+    
+    int get(int key) {
+        if (cacheMap.find(key) == cacheMap.end()) {
+            return -1;
+        }
+        lruList.splice(lruList.begin(), lruList, cacheMap[key]);
+        return cacheMap[key]->second;
+    }
+    
+    void put(int key, int value) {
+        if (cacheMap.find(key) != cacheMap.end()) {
+            cacheMap[key]->second = value;
+            lruList.splice(lruList.begin(), lruList, cacheMap[key]);
+        } else {
+            lruList.emplace_front(key, value);
+            cacheMap[key] = lruList.begin();
+
+            if (cacheMap.size() > cap) {
+                int keyToRemove = lruList.back().first;
+                lruList.pop_back();
+                cacheMap.erase(keyToRemove);
+            }
+        }
+    }
+};
+
