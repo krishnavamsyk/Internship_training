@@ -1,0 +1,111 @@
+####Letter Combinations
+
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        if (digits.empty()) return {};
+
+        unordered_map<char, string> phone = {z
+            {'2',"abc"}, {'3',"def"}, {'4',"ghi"}, {'5',"jkl"},
+            {'6',"mno"}, {'7',"pqrs"}, {'8',"tuv"}, {'9',"wxyz"}
+        };
+
+        vector<string> result;
+        string current;
+
+        // Regular recursive function (not lambda)
+        backtrack(0, digits, phone, current, result);
+        return result;
+    }
+
+private:
+    void backtrack(int index, const string& digits,
+                   unordered_map<char, string>& phone,
+                   string& current, vector<string>& result) {
+        if (index == digits.size()) {
+            result.push_back(current);
+            return;
+        }
+
+        for (char ch : phone[digits[index]]) {
+            current.push_back(ch);
+            backtrack(index + 1, digits, phone, current, result);
+            current.pop_back(); // backtrack
+        }
+    }
+};
+
+
+
+
+####Combination Sum
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> result;
+        vector<int> current;
+        dfs(0, target, candidates, current, result);
+        return result;
+    }
+
+private:
+    void dfs(int index, int target, vector<int>& candidates,
+             vector<int>& current, vector<vector<int>>& result) {
+        if (target == 0) {
+            result.push_back(current);
+            return;
+        }
+        if (index >= candidates.size() || target < 0) {
+            return;
+        }
+
+        current.push_back(candidates[index]);
+        dfs(index, target - candidates[index], candidates, current, result);
+        current.pop_back(); 
+
+        dfs(index + 1, target, candidates, current, result);
+    }
+};
+
+
+####Permutations
+
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+       vector<vector<int>> result;
+        vector<int> current;
+        vector<bool> used(nums.size(), false);
+
+        backtrack(nums, used, current, result);
+        return result;
+    }
+
+private:
+    void backtrack(vector<int>& nums, vector<bool>& used,
+                   vector<int>& current, vector<vector<int>>& result) {
+        if (current.size() == nums.size()) {
+            result.push_back(current);
+            return;
+        }
+
+        for (int i = 0; i < nums.size(); ++i) {
+            if (used[i]) continue;
+
+            used[i] = true;
+            current.push_back(nums[i]);
+
+            backtrack(nums, used, current, result);
+
+            // backtrack
+            used[i] = false;
+            current.pop_back();
+        }
+    }
+};
+
+
+
+
+
