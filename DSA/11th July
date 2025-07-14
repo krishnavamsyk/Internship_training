@@ -1,0 +1,118 @@
+###Palindrome Partitioning
+
+class Solution {
+public:
+    vector<vector<string>> res;
+    vector<vector<int>> dp;
+    vector<vector<string>> partition(string s) {
+        int n = s.size();
+        dp = vector<vector<int>>(n, vector<int>(n, -1));
+        vector<string> path;
+        backtrack(s, 0, path);
+        return res;
+
+    }
+    void backtrack(string& s, int start, vector<string>& path) {
+        if (start == s.size()) {
+            res.push_back(path);
+            return;
+        }
+
+        for (int end = start; end < s.size(); ++end) {
+            if (isPalindrome(s, start, end)) {
+                path.push_back(s.substr(start, end - start + 1));
+                backtrack(s, end + 1, path);
+                path.pop_back();
+            }
+        }
+    }
+
+    bool isPalindrome(string& s, int left, int right) {
+        if (dp[left][right] != -1)
+            return dp[left][right];
+
+        int l = left, r = right;
+        while (l < r) {
+            if (s[l] != s[r]) {
+                dp[left][right] = 0;
+                return false;
+            }
+            l++;
+            r--;
+        }
+        dp[left][right] = 1;
+        return true;
+    }
+};
+
+
+###Fair Distribution of Cookies
+class Solution {
+public:
+    int minimumUnfairness = INT_MAX;
+    int distributeCookies(vector<int>& cookies, int k) {
+        vector<int> children(k, 0);
+        backtrack(cookies, 0, children, k);
+        return minimumUnfairness;
+    }
+
+    void backtrack(vector<int>& cookies, int index, vector<int>& children, int k) {
+        if (index == cookies.size()) {
+            int unfairness = *max_element(children.begin(), children.end());
+            minimumUnfairness = min(minimumUnfairness, unfairness);
+            return;
+        }
+
+        for (int i = 0; i < k; ++i) {
+            children[i] += cookies[index];
+
+            if (*max_element(children.begin(), children.end()) < minimumUnfairness)
+                backtrack(cookies, index + 1, children, k);
+
+            children[i] -= cookies[index];
+
+            if (children[i] == 0) break;
+        }
+    }
+};
+
+
+
+###N-Queens
+
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<vector<string>> solutions;
+        vector<string> board(n, string(n, '.'));
+        vector<bool> columns(n, false);        
+        vector<bool> diag1(2 * n - 1, false);  
+        vector<bool> diag2(2 * n - 1, false);  
+        backtrack(0, n, board, columns, diag1, diag2, solutions);
+        return solutions;
+    }
+
+    void backtrack(int row, int n, vector<string>& board,
+                   vector<bool>& columns, vector<bool>& diag1, vector<bool>& diag2,
+                   vector<vector<string>>& solutions) {
+        if (row == n) {
+            solutions.push_back(board);
+            return;
+        }
+
+        for (int col = 0; col < n; ++col) {
+            int d1 = row - col + n - 1;
+            int d2 = row + col;
+            if (columns[col] || diag1[d1] || diag2[d2])
+                continue;
+
+            board[row][col] = 'Q';
+            columns[col] = diag1[d1] = diag2[d2] = true;
+
+            backtrack(row + 1, n, board, columns, diag1, diag2, solutions);
+
+            board[row][col] = '.';
+            columns[col] = diag1[d1] = diag2[d2] = false;
+        }
+    }
+};
